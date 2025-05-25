@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nest-lab/throttler-storage-redis": "^1.1.0",
     "@nestjs/apollo": "^13.1.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
@@ -43,7 +44,9 @@
     "class-validator": "^0.14.2",
     "graphql": "^16.11.0",
     "graphql-tools": "^9.0.18",
+    "install": "^0.13.0",
     "ioredis": "^5.6.1",
+    "npm": "^11.4.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.16.0",

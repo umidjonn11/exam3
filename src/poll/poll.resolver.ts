@@ -7,6 +7,7 @@ import { UseGuards } from '@nestjs/common';
 import { Roles } from 'src/security/roles.decorator';
 import { RolesGuard } from 'src/security/roles-guard';
 import { UserRole } from 'src/security/roles.enum';
+import { PollResult } from './entities/result.response';
 
 @Resolver(() => PollModel)
 export class PollResolver {
@@ -50,5 +51,10 @@ export class PollResolver {
   @Mutation(() => PollModel)
   removePoll(@Args('id', { type: () => ID }) id: any) {
     return this.pollService.remove(id);
+  }
+
+  @Query(() => [PollResult])
+  async pollResults(@Args('pollId') pollId: string): Promise<PollResult[]> {
+    return this.pollService.getPollResults(pollId);
   }
 }

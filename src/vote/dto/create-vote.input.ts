@@ -1,13 +1,24 @@
-import { InputType, Field, ID } from '@nestjs/graphql';
-import { IsUUID, IsString } from 'class-validator';
+import { InputType, Field } from '@nestjs/graphql';
+import {
+  IsUUID,
+  IsString,
+  IsNotEmpty,
+} from 'class-validator';
 
 @InputType()
 export class CreateVoteInput {
-  @Field(() => ID)
+  @Field()
   @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
+  @Field()
+  @IsUUID()
+  @IsNotEmpty()
   pollId: string;
 
   @Field()
   @IsString()
-  option: string;
+  @IsNotEmpty()
+  selectedOption: string;
 }

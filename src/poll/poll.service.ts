@@ -4,10 +4,12 @@ import { UpdatePollInput } from './dto/update-poll.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Poll } from './entities/poll.entity';
 import { Repository } from 'typeorm';
+import { Vote } from 'src/vote/entities/vote.entity';
+import { PollResult } from './entities/result.response';
 
 @Injectable()
 export class PollService {
-  constructor(@InjectRepository(Poll) private pollRepo:Repository<Poll>){}
+  constructor(@InjectRepository(Poll) private pollRepo:Repository<Poll>,@InjectRepository(Vote) private voteRepository:Repository<Vote>){}
  async create(createPollInput: CreatePollInput) {
     const poll= this.pollRepo.create(createPollInput);
     await this.pollRepo.save(poll)
@@ -44,4 +46,34 @@ async deactivatePoll(id: string): Promise<Poll> {
   remove(id: any) {
     return this.pollRepo.delete(id);
   }
+
+
+  async getPollResults(pollId: string): Promise<PollResult[]> {
+    const poll = await this.pollRepo.findOne({ where: { id: pollId } });
+    if (!poll) throw new NotFoundException('Poll topilmadi');
+
+    const votes = await this.voteRepository.find({ where: { poll: { id: pollId } } });
+
+    const counts: Record<string, number> = {};
+
+    votes.forEach((vote) => {
+      counts[vote.selectedOption] = (counts[vote.selectedOption] || 0) + 1;
+    });
+
+    const totalVotes = votes.length;
+
+
+    const results: PollResult[] = (poll.options || []).map((option: string) => {
+      const count = counts[option] || 0;
+      const percentage = totalVotes > 0 ? (count / totalVotes) * 100 : 0;
+      return {
+        option,
+        count,
+        percentage: +percentage.toFixed(2), 
+      };
+    });
+
+    return results;
+  }
+
 }

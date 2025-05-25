@@ -42,11 +42,18 @@ type LoginResponse {
   refreshToken: String!
 }
 
+type PollResult {
+  option: String!
+  percentage: Float!
+  count: Float!
+}
+
 type Query {
   users: [User!]!
   polls: [PollModel!]!
   activePolls: [PollModel!]!
   poll(id: Int!): PollModel!
+  pollResults(pollId: String!): [PollResult!]!
   vote(id: Int!): VoteModel!
 }
 
@@ -70,8 +77,8 @@ input CreateUserInput {
 }
 
 input LoginInput {
-  name: String = "nima"
-  password: String = "NIaM.1234"
+  name: String = "ali"
+  password: String = "qwerty1234"
 }
 
 input CreatePollInput {
@@ -86,12 +93,14 @@ input UpdatePollInput {
 }
 
 input CreateVoteInput {
-  pollId: ID!
-  option: String!
+  userId: String!
+  pollId: String!
+  selectedOption: String!
 }
 
 input UpdateVoteInput {
-  pollId: ID
-  option: String
+  userId: String
+  pollId: String
+  selectedOption: String
   id: Int!
 }
