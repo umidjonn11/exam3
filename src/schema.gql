@@ -1,0 +1,97 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type VoteModel {
+  id: ID!
+  user: User!
+  poll: PollModel!
+  selectedOption: String!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PollModel {
+  id: ID!
+  question: String!
+  options: [String!]!
+  createdAt: DateTime!
+  createdBy: User!
+  votes: [VoteModel!]
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+
+  """User role like admin, customer, etc."""
+  role: String!
+  created_at: DateTime!
+  polls: [PollModel!]
+  votes: [VoteModel!]
+}
+
+type LoginResponse {
+  user: User!
+  token: String!
+  refreshToken: String!
+}
+
+type Query {
+  users: [User!]!
+  polls: [PollModel!]!
+  activePolls: [PollModel!]!
+  poll(id: Int!): PollModel!
+  vote(id: Int!): VoteModel!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  loginUser(loginUserInput: LoginInput!): LoginResponse!
+  createPoll(createPollInput: CreatePollInput!): PollModel!
+  updatePoll(updatePollInput: UpdatePollInput!): PollModel!
+  deactivatePoll(id: String!): PollModel!
+  removePoll(id: ID!): PollModel!
+  createVote(createVoteInput: CreateVoteInput!): VoteModel!
+  updateVote(updateVoteInput: UpdateVoteInput!): VoteModel!
+  removeVote(id: Int!): VoteModel!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  role: String!
+}
+
+input LoginInput {
+  name: String = "nima"
+  password: String = "NIaM.1234"
+}
+
+input CreatePollInput {
+  question: String!
+  options: [String!]!
+}
+
+input UpdatePollInput {
+  id: ID!
+  question: String
+  options: [String!]
+}
+
+input CreateVoteInput {
+  pollId: ID!
+  option: String!
+}
+
+input UpdateVoteInput {
+  pollId: ID
+  option: String
+  id: Int!
+}
