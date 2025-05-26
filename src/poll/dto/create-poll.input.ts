@@ -1,8 +1,14 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsArray, IsString, ArrayMinSize } from 'class-validator';
+import { IsArray, IsString, ArrayMinSize, IsNotEmpty, IsUUID } from 'class-validator';
 
 @InputType()
 export class CreatePollInput {
+
+  @Field()
+  @IsUUID()
+  @IsNotEmpty()
+  userId: string;
+
   @Field()
   @IsString()
   question: string;

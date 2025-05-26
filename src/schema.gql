@@ -82,6 +82,7 @@ input LoginInput {
 }
 
 input CreatePollInput {
+  userId: String!
   question: String!
   options: [String!]!
 }
